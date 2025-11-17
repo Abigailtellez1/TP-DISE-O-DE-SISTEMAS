@@ -1,5 +1,7 @@
 package edu.utn.alojamiento.listing
 
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -9,23 +11,32 @@ class ListingService(
 ) {
 
 	@Transactional(readOnly = true)
-	fun findAll(): List<Listing> = listingRepository.findAll()
+	fun findAll(pageable: Pageable): Page<Listing> = listingRepository.findAll(pageable)
 
 	@Transactional(readOnly = true)
 	fun findById(id: Long): Listing =
 		listingRepository.findById(id).orElseThrow { ListingNotFoundException(id) }
 
 	@Transactional
-	fun create(listing: Listing): Listing = listingRepository.save(listing)
+	fun create(request: ListingRequest): Listing =
+		listingRepository.save(
+			Listing(
+				title = request.title,
+				description = request.description,
+				nightlyPrice = request.nightlyPrice,
+				city = request.city,
+				maxGuests = request.maxGuests
+			)
+		)
 
 	@Transactional
-	fun update(id: Long, updatedListing: Listing): Listing {
+	fun update(id: Long, update: ListingUpdate): Listing {
 		val existing = findById(id)
-		existing.title = updatedListing.title
-		existing.description = updatedListing.description
-		existing.nightlyPrice = updatedListing.nightlyPrice
-		existing.city = updatedListing.city
-		existing.maxGuests = updatedListing.maxGuests
+		update.title?.let { existing.title = it }
+		update.description?.let { existing.description = it }
+		update.nightlyPrice?.let { existing.nightlyPrice = it }
+		update.city?.let { existing.city = it }
+		update.maxGuests?.let { existing.maxGuests = it }
 		return listingRepository.save(existing)
 	}
 
