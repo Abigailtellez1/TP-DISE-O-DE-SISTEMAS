@@ -1,8 +1,10 @@
-# Listing API Request Examples
+# API Request Examples
 
-All requests assume the application is running locally at `http://localhost:8080`.
+All commands target `http://localhost:8080`. Replace placeholder IDs as needed.
 
-## 1. Create a Listing
+## Listings (`/api/listings`)
+
+### Create a listing
 
 ```bash
 curl -X POST http://localhost:8080/api/listings \
@@ -11,12 +13,13 @@ curl -X POST http://localhost:8080/api/listings \
     "title": "Cozy Palermo Loft",
     "description": "Light-filled loft near the best coffee shops.",
     "nightlyPrice": 95.00,
+    "bedrooms": 2,
     "city": "Buenos Aires",
     "maxGuests": 3
   }'
 ```
 
-## 2. Update a Listing (PATCH specific fields)
+### Patch an existing listing
 
 ```bash
 curl -X PATCH http://localhost:8080/api/listings/1 \
@@ -27,20 +30,66 @@ curl -X PATCH http://localhost:8080/api/listings/1 \
   }'
 ```
 
-## 3. View a Single Listing
+### Get a single listing
 
 ```bash
 curl http://localhost:8080/api/listings/1
 ```
 
-## 4. View Listings with Pagination
+### Get listings with pagination
 
 ```bash
 curl "http://localhost:8080/api/listings?page=0&size=5"
 ```
 
-## 5. Delete a Listing
+### Delete a listing
 
 ```bash
 curl -X DELETE http://localhost:8080/api/listings/1
+```
+
+## Users (`/api/users`)
+
+### Upsert a user profile
+
+```bash
+curl -X PUT http://localhost:8080/api/users/user-123 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "user123@example.com",
+    "name": "Casey Student",
+    "preferredBedrooms": 2
+  }'
+```
+
+### Get a user profile
+
+```bash
+curl http://localhost:8080/api/users/user-123
+```
+
+### Fetch user notifications
+
+```bash
+curl http://localhost:8080/api/users/user-123/notifications
+```
+
+## Reviews (`/api/listings/{listingId}/reviews`)
+
+### Create a review for a listing
+
+```bash
+curl -X POST http://localhost:8080/api/listings/1/reviews \
+  -H "Content-Type: application/json" \
+  -d '{
+    "rating": 5,
+    "comment": "Great stay, super clean!",
+    "authorId": "user-123"
+  }'
+```
+
+### Get reviews for a listing (paginated)
+
+```bash
+curl "http://localhost:8080/api/listings/1/reviews?page=0&size=3"
 ```

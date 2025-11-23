@@ -14,6 +14,8 @@ data class ListingRequest(
 	val description: String,
 	@field:DecimalMin(value = "0.0", inclusive = false)
 	val nightlyPrice: BigDecimal,
+	@field:Min(0)
+	val bedrooms: Int,
 	@field:NotBlank
 	val city: String,
 	@field:Min(1)

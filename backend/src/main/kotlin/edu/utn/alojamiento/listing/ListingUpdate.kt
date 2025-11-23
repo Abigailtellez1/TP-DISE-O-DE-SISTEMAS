@@ -12,6 +12,8 @@ data class ListingUpdate(
 	val description: String? = null,
 	@field:DecimalMin(value = "0.0", inclusive = false)
 	val nightlyPrice: BigDecimal? = null,
+	@field:Min(0)
+	val bedrooms: Int? = null,
 	@field:Size(min = 1)
 	val city: String? = null,
 	@field:Min(1)

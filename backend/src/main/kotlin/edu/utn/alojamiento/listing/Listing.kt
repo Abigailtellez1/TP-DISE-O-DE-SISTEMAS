@@ -20,6 +20,8 @@ data class Listing(
 	var description: String = "",
 	@Column(nullable = false)
 	var nightlyPrice: BigDecimal = BigDecimal.ZERO,
+	@Column(nullable = false, columnDefinition = "integer default 1")
+	var bedrooms: Int = 1,
 	@Column(nullable = false)
 	var city: String = "",
 	@Column(nullable = false)
