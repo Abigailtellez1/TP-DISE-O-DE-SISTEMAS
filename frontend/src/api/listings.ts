@@ -1,8 +1,14 @@
 import { apiRequest } from './client'
 import type { Listing, ListingRequest, ListingUpdate, Page } from '../types/listing'
 
-export const fetchListings = (page = 0, size = 10) =>
-  apiRequest<Page<Listing>>('/api/listings', { query: { page, size } })
+export interface ListingQuery {
+  ownerId?: string
+  district?: string
+  city?: string
+}
+
+export const fetchListings = (page = 0, size = 10, filters: ListingQuery = {}) =>
+  apiRequest<Page<Listing>>('/api/listings', { query: { page, size, ...filters } })
 
 export const fetchListing = (id: number) =>
   apiRequest<Listing>(`/api/listings/${id}`)

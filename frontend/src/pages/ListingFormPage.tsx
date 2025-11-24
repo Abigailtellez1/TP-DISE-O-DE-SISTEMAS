@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from 'react'
+import { type FormEvent, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { createListing } from '../api/listings'
 import type { ListingRequest } from '../types/listing'

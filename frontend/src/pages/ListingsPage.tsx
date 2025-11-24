@@ -24,7 +24,8 @@ export const ListingsPage = () => {
   useEffect(() => {
     let active = true
     setState((prev) => ({ ...prev, loading: true, error: null }))
-    fetchListings(page, size)
+    const filters = role === 'landlord' && userId ? { ownerId: userId } : {}
+    fetchListings(page, size, filters)
       .then((res) => {
         if (!active) return
         setState({ data: res, loading: false, error: null })
@@ -38,7 +39,7 @@ export const ListingsPage = () => {
     return () => {
       active = false
     }
-  }, [page, size])
+  }, [page, size, role, userId])
 
   const totalPages = state.data?.totalPages ?? 0
   const canPrev = page > 0
@@ -50,9 +51,6 @@ export const ListingsPage = () => {
         <div>
           <p className="pill">Listings</p>
           <h1>Browse available stays</h1>
-          <p className="subtitle">
-            Minimal view hitting the paginated backend endpoint (Spring Pageable).
-          </p>
         </div>
         <div className="status-bar">
           <span className="muted">
@@ -80,12 +78,10 @@ export const ListingsPage = () => {
               <thead>
                 <tr>
                   <th>Title</th>
-                  <th>City</th>
                   <th>District</th>
                   <th>Bedrooms</th>
                   <th>Guests</th>
                   <th>Nightly price</th>
-                  <th>Owner</th>
                 </tr>
               </thead>
               <tbody>
@@ -101,12 +97,10 @@ export const ListingsPage = () => {
                       <td>
                         <Link to={`/listings/${listing.id}`}>{listing.title}</Link>
                       </td>
-                      <td>{listing.city}</td>
                       <td>{listing.district}</td>
                       <td>{listing.bedrooms}</td>
                       <td>{listing.maxGuests}</td>
                       <td>${listing.nightlyPrice.toFixed(2)}</td>
-                      <td>{listing.ownerId}</td>
                     </tr>
                   ))
                 )}
