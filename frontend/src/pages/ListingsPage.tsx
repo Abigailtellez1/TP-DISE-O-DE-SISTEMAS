@@ -81,9 +81,11 @@ export const ListingsPage = () => {
                 <tr>
                   <th>Title</th>
                   <th>City</th>
+                  <th>District</th>
                   <th>Bedrooms</th>
                   <th>Guests</th>
                   <th>Nightly price</th>
+                  <th>Owner</th>
                 </tr>
               </thead>
               <tbody>
@@ -100,9 +102,11 @@ export const ListingsPage = () => {
                         <Link to={`/listings/${listing.id}`}>{listing.title}</Link>
                       </td>
                       <td>{listing.city}</td>
+                      <td>{listing.district}</td>
                       <td>{listing.bedrooms}</td>
                       <td>{listing.maxGuests}</td>
                       <td>${listing.nightlyPrice.toFixed(2)}</td>
+                      <td>{listing.ownerId}</td>
                     </tr>
                   ))
                 )}

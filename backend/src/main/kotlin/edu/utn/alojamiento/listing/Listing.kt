@@ -25,5 +25,9 @@ data class Listing(
 	@Column(nullable = false)
 	var city: String = "",
 	@Column(nullable = false)
+	var district: String = "",
+	@Column(nullable = false, length = 64)
+	var ownerId: String = "",
+	@Column(nullable = false)
 	var maxGuests: Int = 1
 )

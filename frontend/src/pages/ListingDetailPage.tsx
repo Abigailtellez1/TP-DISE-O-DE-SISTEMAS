@@ -54,6 +54,10 @@ export const ListingDetailPage = () => {
               <div>{listing.city}</div>
             </div>
             <div className="form-field">
+              <label>District</label>
+              <div>{listing.district}</div>
+            </div>
+            <div className="form-field">
               <label>Nightly price</label>
               <div>${listing.nightlyPrice.toFixed(2)}</div>
             </div>
@@ -64,6 +68,10 @@ export const ListingDetailPage = () => {
             <div className="form-field">
               <label>Max guests</label>
               <div>{listing.maxGuests}</div>
+            </div>
+            <div className="form-field">
+              <label>Owner</label>
+              <div>{listing.ownerId}</div>
             </div>
             <div className="form-field">
               <label>Description</label>

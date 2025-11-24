@@ -3,6 +3,7 @@ package edu.utn.alojamiento.listing
 import java.util.concurrent.CopyOnWriteArraySet
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.data.jpa.domain.Specification
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -14,7 +15,8 @@ class ListingService(
 	private val observers = CopyOnWriteArraySet<ListingObserver>()
 
 	@Transactional(readOnly = true)
-	fun findAll(pageable: Pageable): Page<Listing> = listingRepository.findAll(pageable)
+	fun findAll(pageable: Pageable, filters: ListingFilters): Page<Listing> =
+		listingRepository.findAll(buildSpecification(filters), pageable)
 
 	@Transactional(readOnly = true)
 	fun findById(id: Long): Listing =
@@ -29,6 +31,8 @@ class ListingService(
 				nightlyPrice = request.nightlyPrice,
 				bedrooms = request.bedrooms,
 				city = request.city,
+				district = request.district,
+				ownerId = request.ownerId,
 				maxGuests = request.maxGuests
 			)
 		)
@@ -44,6 +48,8 @@ class ListingService(
 		update.nightlyPrice?.let { existing.nightlyPrice = it }
 		update.bedrooms?.let { existing.bedrooms = it }
 		update.city?.let { existing.city = it }
+		update.district?.let { existing.district = it }
+		update.ownerId?.let { existing.ownerId = it }
 		update.maxGuests?.let { existing.maxGuests = it }
 		val saved = listingRepository.save(existing)
 		notifyObservers(saved)
@@ -68,5 +74,19 @@ class ListingService(
 
 	override fun notifyObservers(listing: Listing) {
 		observers.forEach { it.onListingAvailable(listing) }
+	}
+
+	private fun buildSpecification(filters: ListingFilters): Specification<Listing> {
+		var spec: Specification<Listing> = Specification.where(null)
+		filters.ownerId?.let { owner ->
+			spec = spec.and { root, _, cb -> cb.equal(root.get<String>("ownerId"), owner) }
+		}
+		filters.district?.let { district ->
+			spec = spec.and { root, _, cb -> cb.equal(root.get<String>("district"), district) }
+		}
+		filters.city?.let { city ->
+			spec = spec.and { root, _, cb -> cb.equal(cb.lower(root.get("city")), city.lowercase()) }
+		}
+		return spec
 	}
 }

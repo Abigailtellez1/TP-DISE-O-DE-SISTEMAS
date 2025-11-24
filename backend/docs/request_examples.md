@@ -15,6 +15,8 @@ curl -X POST http://localhost:8080/api/listings \
     "nightlyPrice": 95.00,
     "bedrooms": 2,
     "city": "Buenos Aires",
+    "district": "Palermo",
+    "ownerId": "landlord-123",
     "maxGuests": 3
   }'
 ```
@@ -36,10 +38,10 @@ curl -X PATCH http://localhost:8080/api/listings/1 \
 curl http://localhost:8080/api/listings/1
 ```
 
-### Get listings with pagination
+### Get listings with pagination (with optional filters)
 
 ```bash
-curl "http://localhost:8080/api/listings?page=0&size=5"
+curl "http://localhost:8080/api/listings?page=0&size=5&ownerId=landlord-123&district=Palermo"
 ```
 
 ### Delete a listing

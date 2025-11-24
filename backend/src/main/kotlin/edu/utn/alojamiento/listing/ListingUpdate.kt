@@ -16,6 +16,10 @@ data class ListingUpdate(
 	val bedrooms: Int? = null,
 	@field:Size(min = 1)
 	val city: String? = null,
+	@field:Size(min = 1)
+	val district: String? = null,
+	@field:Size(min = 1)
+	val ownerId: String? = null,
 	@field:Min(1)
 	val maxGuests: Int? = null
 )

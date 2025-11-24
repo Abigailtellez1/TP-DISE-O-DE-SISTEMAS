@@ -18,6 +18,10 @@ data class ListingRequest(
 	val bedrooms: Int,
 	@field:NotBlank
 	val city: String,
+	@field:NotBlank
+	val district: String,
+	@field:NotBlank
+	val ownerId: String,
 	@field:Min(1)
 	val maxGuests: Int
 )

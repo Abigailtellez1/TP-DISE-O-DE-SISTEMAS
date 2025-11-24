@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
@@ -23,8 +24,14 @@ class ListingController(
 
 	@GetMapping
 	fun getListings(
-		@PageableDefault(page = 0, size = 20) pageable: Pageable
-	): Page<Listing> = listingService.findAll(pageable)
+		@PageableDefault(page = 0, size = 20) pageable: Pageable,
+		@RequestParam(required = false) ownerId: String?,
+		@RequestParam(required = false) district: String?,
+		@RequestParam(required = false) city: String?
+	): Page<Listing> = listingService.findAll(
+		pageable = pageable,
+		filters = ListingFilters(ownerId = ownerId, district = district, city = city)
+	)
 
 	@GetMapping("/{id}")
 	fun getListing(@PathVariable id: Long): Listing = listingService.findById(id)

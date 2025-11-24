@@ -5,6 +5,8 @@ export interface Listing {
   nightlyPrice: number
   bedrooms: number
   city: string
+  district: string
+  ownerId: string
   maxGuests: number
 }
 
@@ -14,6 +16,8 @@ export interface ListingRequest {
   nightlyPrice: number
   bedrooms: number
   city: string
+  district: string
+  ownerId: string
   maxGuests: number
 }
 

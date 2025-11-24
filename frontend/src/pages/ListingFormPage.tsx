@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { createListing } from '../api/listings'
 import type { ListingRequest } from '../types/listing'
@@ -10,15 +10,23 @@ const emptyListing: ListingRequest = {
   nightlyPrice: 0,
   bedrooms: 1,
   city: '',
+  district: '',
+  ownerId: '',
   maxGuests: 1,
 }
 
 export const ListingFormPage = () => {
-  const { role } = useAuth()
+  const { role, userId } = useAuth()
   const navigate = useNavigate()
   const [form, setForm] = useState<ListingRequest>(emptyListing)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (userId) {
+      setForm((prev) => ({ ...prev, ownerId: prev.ownerId || userId }))
+    }
+  }, [userId])
 
   const handleChange = (key: keyof ListingRequest, value: string | number) => {
     setForm((prev) => ({ ...prev, [key]: value }))
@@ -34,6 +42,7 @@ export const ListingFormPage = () => {
         nightlyPrice: Number(form.nightlyPrice),
         bedrooms: Number(form.bedrooms),
         maxGuests: Number(form.maxGuests),
+        ownerId: form.ownerId || userId || '',
       })
       navigate('/listings')
     } catch (err) {
@@ -106,6 +115,15 @@ export const ListingFormPage = () => {
             />
           </div>
           <div className="form-field">
+            <label htmlFor="district">District</label>
+            <input
+              id="district"
+              value={form.district}
+              onChange={(e) => handleChange('district', e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-field">
             <label htmlFor="nightlyPrice">Nightly price</label>
             <input
               id="nightlyPrice"
@@ -116,6 +134,16 @@ export const ListingFormPage = () => {
               onChange={(e) => handleChange('nightlyPrice', e.target.valueAsNumber || 0)}
               required
             />
+          </div>
+          <div className="form-field">
+            <label htmlFor="ownerId">Owner ID</label>
+            <input
+              id="ownerId"
+              value={form.ownerId}
+              onChange={(e) => handleChange('ownerId', e.target.value)}
+              required
+            />
+            <small className="muted">Prefilled with your user id when logged in.</small>
           </div>
           <div className="form-field">
             <label htmlFor="bedrooms">Bedrooms</label>
