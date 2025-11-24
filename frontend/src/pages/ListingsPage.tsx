@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { fetchListings } from '../api/listings'
 import type { Listing, Page } from '../types/listing'
 import { useAuth } from '../context/AuthContext'
+import { Link, useNavigate } from 'react-router-dom'
 
 interface ListingPageState {
   data: Page<Listing> | null
@@ -10,7 +11,8 @@ interface ListingPageState {
 }
 
 export const ListingsPage = () => {
-  const { userId, logout } = useAuth()
+  const { userId, role, logout } = useAuth()
+  const navigate = useNavigate()
   const [page, setPage] = useState(0)
   const [size] = useState(5)
   const [state, setState] = useState<ListingPageState>({
@@ -53,7 +55,9 @@ export const ListingsPage = () => {
           </p>
         </div>
         <div className="status-bar">
-          <span className="muted">User: {userId ?? 'guest'}</span>
+          <span className="muted">
+            User: {userId ?? 'guest'} · Role: {role}
+          </span>
           <button className="btn secondary" type="button" onClick={logout}>
             Logout
           </button>
@@ -61,6 +65,13 @@ export const ListingsPage = () => {
       </header>
 
       <div className="panel">
+        {role === 'landlord' && (
+          <div className="button-row" style={{ marginBottom: '1rem' }}>
+            <button className="btn" onClick={() => navigate('/listings/new')}>
+              Create listing
+            </button>
+          </div>
+        )}
         {state.loading && <p className="muted">Loading listings…</p>}
         {state.error && <p className="error">Error: {state.error}</p>}
         {!state.loading && !state.error && state.data && (
@@ -85,7 +96,9 @@ export const ListingsPage = () => {
                 ) : (
                   state.data.content.map((listing) => (
                     <tr key={listing.id}>
-                      <td>{listing.title}</td>
+                      <td>
+                        <Link to={`/listings/${listing.id}`}>{listing.title}</Link>
+                      </td>
                       <td>{listing.city}</td>
                       <td>{listing.bedrooms}</td>
                       <td>{listing.maxGuests}</td>

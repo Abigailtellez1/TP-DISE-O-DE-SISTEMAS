@@ -3,6 +3,8 @@ import { LoginPage } from '../pages/LoginPage'
 import { ListingsPage } from '../pages/ListingsPage'
 import { useAuth } from '../context/AuthContext'
 import { API_BASE_URL } from '../api/client'
+import { ListingFormPage } from '../pages/ListingFormPage'
+import { ListingDetailPage } from '../pages/ListingDetailPage'
 
 const Protected = () => {
   const { userId } = useAuth()
@@ -35,6 +37,8 @@ export const AppRouter = createBrowserRouter(
       <Route path="/login" element={<LoginPage />} />
       <Route element={<Protected />}>
         <Route path="/listings" element={<ListingsPage />} />
+        <Route path="/listings/new" element={<ListingFormPage />} />
+        <Route path="/listings/:id" element={<ListingDetailPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Route>,
