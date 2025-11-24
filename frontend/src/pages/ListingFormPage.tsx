@@ -46,7 +46,7 @@ export const ListingFormPage = () => {
       })
       navigate('/listings')
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Failed to create listing'
+      const message = err instanceof Error ? err.message : 'No se pudo crear la publicación'
       setError(message)
     } finally {
       setLoading(false)
@@ -58,16 +58,16 @@ export const ListingFormPage = () => {
       <div className="page">
         <header className="page-header">
           <div>
-            <p className="pill">Listings</p>
-            <h1>Create listing</h1>
-            <p className="subtitle">Only landlords can create listings.</p>
+            <p className="pill">Publicaciones</p>
+            <h1>Crear publicación</h1>
+            <p className="subtitle">Solo los anfitriones pueden crear publicaciones.</p>
           </div>
         </header>
         <div className="panel">
-          <p className="error">You must be logged in as landlord to create listings.</p>
+          <p className="error">Debés ingresar como anfitrión para crear una publicación.</p>
           <div className="button-row">
             <button className="btn secondary" onClick={() => navigate('/listings')}>
-              Back to listings
+              Volver a publicaciones
             </button>
           </div>
         </div>
@@ -79,16 +79,16 @@ export const ListingFormPage = () => {
     <div className="page">
       <header className="page-header">
         <div>
-          <p className="pill">Listings</p>
-          <h1>Create a new listing</h1>
-          <p className="subtitle">Provide the basic details to publish your listing.</p>
+          <p className="pill">Publicaciones</p>
+          <h1>Crear un nuevo alojamiento</h1>
+          <p className="subtitle">Cargá los datos básicos para publicar tu alojamiento.</p>
         </div>
       </header>
 
       <div className="panel">
         <form className="form-grid" onSubmit={handleSubmit}>
           <div className="form-field">
-            <label htmlFor="title">Title</label>
+            <label htmlFor="title">Título</label>
             <input
               id="title"
               value={form.title}
@@ -97,7 +97,7 @@ export const ListingFormPage = () => {
             />
           </div>
           <div className="form-field">
-            <label htmlFor="description">Description</label>
+            <label htmlFor="description">Descripción</label>
             <input
               id="description"
               value={form.description}
@@ -106,7 +106,7 @@ export const ListingFormPage = () => {
             />
           </div>
           <div className="form-field">
-            <label htmlFor="city">City</label>
+            <label htmlFor="city">Ciudad</label>
             <input
               id="city"
               value={form.city}
@@ -115,7 +115,7 @@ export const ListingFormPage = () => {
             />
           </div>
           <div className="form-field">
-            <label htmlFor="district">District</label>
+            <label htmlFor="district">Barrio</label>
             <input
               id="district"
               value={form.district}
@@ -124,7 +124,7 @@ export const ListingFormPage = () => {
             />
           </div>
           <div className="form-field">
-            <label htmlFor="nightlyPrice">Nightly price</label>
+            <label htmlFor="nightlyPrice">Precio por noche</label>
             <input
               id="nightlyPrice"
               type="number"
@@ -136,17 +136,17 @@ export const ListingFormPage = () => {
             />
           </div>
           <div className="form-field">
-            <label htmlFor="ownerId">Owner ID</label>
+            <label htmlFor="ownerId">ID del propietario</label>
             <input
               id="ownerId"
               value={form.ownerId}
               onChange={(e) => handleChange('ownerId', e.target.value)}
               required
             />
-            <small className="muted">Prefilled with your user id when logged in.</small>
+            <small className="muted">Se completa con tu usuario al iniciar sesión.</small>
           </div>
           <div className="form-field">
-            <label htmlFor="bedrooms">Bedrooms</label>
+            <label htmlFor="bedrooms">Habitaciones</label>
             <input
               id="bedrooms"
               type="number"
@@ -157,7 +157,7 @@ export const ListingFormPage = () => {
             />
           </div>
           <div className="form-field">
-            <label htmlFor="maxGuests">Max guests</label>
+            <label htmlFor="maxGuests">Máximo de huéspedes</label>
             <input
               id="maxGuests"
               type="number"
@@ -170,10 +170,10 @@ export const ListingFormPage = () => {
           {error && <p className="error">Error: {error}</p>}
           <div className="button-row">
             <button className="btn" type="submit" disabled={loading}>
-              {loading ? 'Saving…' : 'Create listing'}
+              {loading ? 'Guardando…' : 'Crear publicación'}
             </button>
             <button className="btn secondary" type="button" onClick={() => navigate('/listings')}>
-              Cancel
+              Cancelar
             </button>
           </div>
         </form>

@@ -22,27 +22,30 @@ export const LoginPage = () => {
       <header className="page-header">
         <div>
           <p className="pill">Alojamiento Estudiantil</p>
-          <h1>Login as guest</h1>
-          <p className="subtitle">Use the guest ID to explore listings, reviews, and notifications.</p>
+          <h1>Ingresá como estudiante o host</h1>
+          <p className="subtitle">
+            Usá el ID de estudiante para explorar publicaciones, reseñas y notificaciones, o entrá como
+            anfitrión para crear tu propia publicación.
+          </p>
         </div>
       </header>
 
       <div className="panel">
         <form className="form-grid" onSubmit={handleSubmit}>
           <div className="form-field">
-            <label htmlFor="userId">User ID</label>
+            <label htmlFor="userId">ID de usuario</label>
             <input
               id="userId"
               name="userId"
               value={userId}
               onChange={(e) => setUserId(e.target.value)}
-              placeholder="Enter or confirm your user id"
+              placeholder="Ingresá o confirmá tu usuario"
             />
-            <small className="muted">Default guest: {DEFAULT_USER}</small>
+            <small className="muted">Usuario sugerido: {DEFAULT_USER}</small>
           </div>
           <fieldset className="form-field" style={{ border: '1px solid #e5e7eb', padding: '0.75rem', borderRadius: '10px' }}>
             <legend className="muted" style={{ padding: '0 0.3rem' }}>
-              Choose a role
+              Elegí tu rol
             </legend>
             <div className="button-row">
               <button
@@ -50,20 +53,20 @@ export const LoginPage = () => {
                 className={`btn ${role === 'guest' ? '' : 'secondary'}`}
                 onClick={() => setRole('guest')}
               >
-                Log in as guest
+                Entrar como estudiante
               </button>
               <button
                 type="button"
                 className={`btn ${role === 'landlord' ? '' : 'secondary'}`}
                 onClick={() => setRole('landlord')}
               >
-                Log in as landlord
+                Entrar como host
               </button>
             </div>
           </fieldset>
           <div className="button-row">
             <button type="submit" className="btn">
-              Continue
+              Continuar
             </button>
           </div>
         </form>

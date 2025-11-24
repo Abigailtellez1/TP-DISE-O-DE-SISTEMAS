@@ -32,7 +32,7 @@ export const ListingsPage = () => {
       })
       .catch((err: unknown) => {
         if (!active) return
-        const message = err instanceof Error ? err.message : 'Failed to load listings'
+        const message = err instanceof Error ? err.message : 'No se pudieron cargar las publicaciones'
         setState({ data: null, loading: false, error: message })
       })
 
@@ -49,15 +49,15 @@ export const ListingsPage = () => {
     <div className="page">
       <header className="page-header">
         <div>
-          <p className="pill">Listings</p>
-          <h1>Browse available stays</h1>
+          <p className="pill">Publicaciones</p>
+          <h1>Explorá los alojamientos</h1>
         </div>
         <div className="status-bar">
           <span className="muted">
-            User: {userId ?? 'guest'} · Role: {role}
+            Usuario: {userId} · Rol: {role === 'landlord' ? 'host' : 'estudiante'}
           </span>
           <button className="btn secondary" type="button" onClick={logout}>
-            Logout
+            Salir
           </button>
         </div>
       </header>
@@ -66,29 +66,29 @@ export const ListingsPage = () => {
         {role === 'landlord' && (
           <div className="button-row" style={{ marginBottom: '1rem' }}>
             <button className="btn" onClick={() => navigate('/listings/new')}>
-              Create listing
+              Crear publicación
             </button>
           </div>
         )}
-        {state.loading && <p className="muted">Loading listings…</p>}
+        {state.loading && <p className="muted">Cargando publicaciones…</p>}
         {state.error && <p className="error">Error: {state.error}</p>}
         {!state.loading && !state.error && state.data && (
           <>
             <table className="table">
               <thead>
                 <tr>
-                  <th>Title</th>
-                  <th>District</th>
-                  <th>Bedrooms</th>
-                  <th>Guests</th>
-                  <th>Nightly price</th>
+                  <th>Título</th>
+                  <th>Barrio</th>
+                  <th>Habitaciones</th>
+                  <th>Huéspedes</th>
+                  <th>Precio/noche</th>
                 </tr>
               </thead>
               <tbody>
                 {state.data.content.length === 0 ? (
                   <tr>
                     <td colSpan={5} className="muted">
-                      No listings found.
+                      No hay publicaciones.
                     </td>
                   </tr>
                 ) : (
@@ -109,14 +109,14 @@ export const ListingsPage = () => {
 
             <div className="status-bar" style={{ justifyContent: 'space-between', marginTop: '1rem' }}>
               <div className="muted">
-                Page {page + 1} of {totalPages || 1} · Total {state.data.totalElements} listings
+                Página {page + 1} de {totalPages || 1} · Total {state.data.totalElements} publicaciones
               </div>
               <div className="button-row">
                 <button className="btn secondary" onClick={() => setPage((p) => p - 1)} disabled={!canPrev}>
-                  Previous
+                  Anterior
                 </button>
                 <button className="btn secondary" onClick={() => setPage((p) => p + 1)} disabled={!canNext}>
-                  Next
+                  Siguiente
                 </button>
               </div>
             </div>

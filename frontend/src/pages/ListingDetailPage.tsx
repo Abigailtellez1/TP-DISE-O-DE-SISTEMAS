@@ -23,7 +23,7 @@ export const ListingDetailPage = () => {
         setLoading(false)
       })
       .catch((err) => {
-        const message = err instanceof Error ? err.message : 'Failed to load listing'
+        const message = err instanceof Error ? err.message : 'No se pudo cargar el detalle'
         setError(message)
         setLoading(false)
       })
@@ -33,48 +33,48 @@ export const ListingDetailPage = () => {
     <div className="page">
       <header className="page-header">
         <div>
-          <p className="pill">Listing</p>
-          <h1>{listing ? listing.title : 'Listing details'}</h1>
-          <p className="subtitle">Quick detail view from the backend.</p>
+          <p className="pill">Publicación</p>
+          <h1>{listing ? listing.title : 'Detalle del alojamiento'}</h1>
+          <p className="subtitle">Detalle rápido desde el backend.</p>
         </div>
         <div className="button-row">
           <button className="btn secondary" onClick={() => navigate('/listings')}>
-            Back to listings
+            Volver a publicaciones
           </button>
         </div>
       </header>
 
       <div className="panel">
-        {loading && <p className="muted">Loading…</p>}
+        {loading && <p className="muted">Cargando…</p>}
         {error && <p className="error">Error: {error}</p>}
         {!loading && !error && listing && (
           <div className="form-grid">
             <div className="form-field">
-              <label>City</label>
+              <label>Ciudad</label>
               <div>{listing.city}</div>
             </div>
             <div className="form-field">
-              <label>District</label>
+              <label>Barrio</label>
               <div>{listing.district}</div>
             </div>
             <div className="form-field">
-              <label>Nightly price</label>
+              <label>Precio por noche</label>
               <div>${listing.nightlyPrice.toFixed(2)}</div>
             </div>
             <div className="form-field">
-              <label>Bedrooms</label>
+              <label>Habitaciones</label>
               <div>{listing.bedrooms}</div>
             </div>
             <div className="form-field">
-              <label>Max guests</label>
+              <label>Máximo de huéspedes</label>
               <div>{listing.maxGuests}</div>
             </div>
             <div className="form-field">
-              <label>Owner</label>
+              <label>Propietario</label>
               <div>{listing.ownerId}</div>
             </div>
             <div className="form-field">
-              <label>Description</label>
+              <label>Descripción</label>
               <div>{listing.description}</div>
             </div>
           </div>
