@@ -16,10 +16,10 @@ export class ApiError extends Error {
 
 type QueryValue = string | number | boolean | null | undefined
 
-export interface RequestOptions extends RequestInit {
-  query?: Record<string, QueryValue>
-  /** Body can be a plain object; it will be JSON stringified. */
-  body?: BodyInit | Record<string, unknown> | null
+export type RequestOptions = Omit<RequestInit, 'body'> & {
+	query?: Record<string, QueryValue>
+	/** Body can be a plain object; it will be JSON stringified. */
+	body?: BodyInit | object | null
 }
 
 const buildUrl = (path: string, query?: Record<string, QueryValue>) => {
@@ -36,17 +36,21 @@ const buildUrl = (path: string, query?: Record<string, QueryValue>) => {
 export async function apiRequest<T>(path: string, options: RequestOptions = {}): Promise<T> {
   const { query, headers, body, method, ...rest } = options
   const finalHeaders = new Headers(headers)
-  let finalBody = body ?? null
+  let finalBody: BodyInit | null | undefined = null
 
-  if (body && typeof body === 'object' && !(body instanceof FormData) && !(body instanceof Blob)) {
-    finalHeaders.set('Content-Type', 'application/json')
-    finalBody = JSON.stringify(body)
+  if (body !== undefined && body !== null) {
+    if (typeof body === 'object' && !(body instanceof FormData) && !(body instanceof Blob)) {
+      finalHeaders.set('Content-Type', 'application/json')
+      finalBody = JSON.stringify(body)
+    } else {
+      finalBody = body as BodyInit
+    }
   }
 
   const response = await fetch(buildUrl(path, query), {
     method: method ?? 'GET',
     headers: finalHeaders,
-    body: finalBody,
+    body: finalBody ?? undefined,
     ...rest,
   })
 

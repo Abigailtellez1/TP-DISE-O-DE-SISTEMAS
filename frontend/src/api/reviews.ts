@@ -1,5 +1,5 @@
 import { apiRequest } from './client'
-import { ReviewRequest, ReviewsPage, Review } from '../types/review'
+import type { ReviewRequest, ReviewsPage, Review } from '../types/review'
 
 export const fetchReviews = (listingId: number, page = 0, size = 10) =>
   apiRequest<ReviewsPage>(`/api/listings/${listingId}/reviews`, {

@@ -1,5 +1,5 @@
 import { apiRequest } from './client'
-import { Listing, ListingRequest, ListingUpdate, Page } from '../types/listing'
+import type { Listing, ListingRequest, ListingUpdate, Page } from '../types/listing'
 
 export const fetchListings = (page = 0, size = 10) =>
   apiRequest<Page<Listing>>('/api/listings', { query: { page, size } })

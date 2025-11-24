@@ -1,5 +1,5 @@
 import { apiRequest } from './client'
-import { ListingNotification, UserProfile, UserProfileRequest } from '../types/user'
+import type { ListingNotification, UserProfile, UserProfileRequest } from '../types/user'
 
 export const fetchUserProfile = (userId: string) =>
   apiRequest<UserProfile>(`/api/users/${userId}`)
