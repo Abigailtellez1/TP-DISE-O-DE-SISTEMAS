@@ -3,6 +3,9 @@ import { fetchListings } from '../api/listings'
 import type { Listing, Page } from '../types/listing'
 import { useAuth } from '../context/AuthContext'
 import { Link, useNavigate } from 'react-router-dom'
+import { fetchUserNotifications } from '../api/users'
+import type { ListingNotification } from '../types/user'
+import { Modal } from '../components/Modal'
 
 interface ListingPageState {
   data: Page<Listing> | null
@@ -20,6 +23,10 @@ export const ListingsPage = () => {
     loading: true,
     error: null,
   })
+  const [notifications, setNotifications] = useState<ListingNotification[]>([])
+  const [notifOpen, setNotifOpen] = useState(false)
+  const [notifLoading, setNotifLoading] = useState(false)
+  const [notifError, setNotifError] = useState<string | null>(null)
 
   useEffect(() => {
     let active = true
@@ -45,6 +52,26 @@ export const ListingsPage = () => {
   const canPrev = page > 0
   const canNext = page + 1 < totalPages
 
+  const openNotifications = async () => {
+    if (!userId) {
+      setNotifError('Iniciá sesión para ver notificaciones')
+      setNotifOpen(true)
+      return
+    }
+    setNotifOpen(true)
+    setNotifLoading(true)
+    setNotifError(null)
+    try {
+      const res = await fetchUserNotifications(userId)
+      setNotifications(res)
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'No se pudieron cargar las notificaciones'
+      setNotifError(msg)
+    } finally {
+      setNotifLoading(false)
+    }
+  }
+
   return (
     <div className="page">
       <header className="page-header">
@@ -54,8 +81,11 @@ export const ListingsPage = () => {
         </div>
         <div className="status-bar">
           <span className="muted">
-            Usuario: {userId} · Rol: {role === 'landlord' ? 'host' : 'estudiante'}
+            Usuario: {userId ?? 'invitado'} · Rol: {role === 'landlord' ? 'anfitrión' : 'estudiante'}
           </span>
+          <button className="btn secondary" type="button" onClick={openNotifications}>
+            Ver notificaciones
+          </button>
           <button className="btn" type="button" onClick={logout}>
             Salir
           </button>
@@ -123,6 +153,22 @@ export const ListingsPage = () => {
           </>
         )}
       </div>
+
+      <Modal open={notifOpen} title="Notificaciones" onClose={() => setNotifOpen(false)}>
+        {notifLoading && <p className="muted">Cargando…</p>}
+        {notifError && <p className="error">Error: {notifError}</p>}
+        {!notifLoading && !notifError && (
+          <>
+            {notifications.length === 0 && <p className="muted">No tenés notificaciones nuevas.</p>}
+            {notifications.map((n) => (
+              <div key={`${n.listingId}-${n.listingTitle}`} className="form-field">
+                <label>{n.listingTitle}</label>
+                <div>Habitaciones: {n.bedrooms}</div>
+              </div>
+            ))}
+          </>
+        )}
+      </Modal>
     </div>
   )
 }
