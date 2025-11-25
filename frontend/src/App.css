@@ -28,7 +28,7 @@
 
 .pill {
   padding: 0.4rem 0.8rem;
-  border-radius: 999px;
+  border-radius: 15px;
   background: #DBD8D9;
   color: #A50028;
   font-size: 0.95rem;
@@ -55,7 +55,7 @@
 .panel {
   background: #ffffff;
   border: 1px solid #e5e7eb;
-  border-radius: 12px;
+  border-radius: 15px;
   padding: 1.25rem;
   box-shadow: 0 8px 18px rgba(15, 23, 42, 0.05);
 }
@@ -78,14 +78,14 @@
 
 .form-field input {
   border: 1px solid #d4d7dc;
-  border-radius: 8px;
+  border-radius: 15px;
   padding: 0.6rem 0.75rem;
   font-size: 1rem;
   background: #fff;
 }
 .form-field textarea {
   border: 1px solid #d4d7dc;
-  border-radius: 8px;
+  border-radius: 15px;
   padding: 0.6rem 0.75rem;
   font-size: 1rem;
   min-height: 96px;
@@ -100,8 +100,8 @@
 }
 
 .btn {
-  border: none;
-  border-radius: 10px;
+  border: 1px solid;
+  border-radius: 15px;
   padding: 0.65rem 1rem;
   font-size: 1rem;
   font-weight: 600;
@@ -111,10 +111,51 @@
   transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
 
+.btn:hover {
+  border: 1px solid;
+  background: #f8fafc;
+  color: #A50028;
+}
+
 .btn.secondary {
   background: #eef2f7;
   color: #0f172a;
   border: 1px solid #cbd5e1;
+}
+
+.btn.secondary:hover {
+  border: 1px solid;
+  background: #f8fafc;
+  color: #A50028;
+}
+
+.icon-btn {
+  border: 1px solid;
+  padding: 0.5rem;
+  border-radius: 10px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #a50028;
+  color: #f1f5f9;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.icon-btn:hover {
+  border: 1px solid;
+  background: #f1f5f9;
+  color: #a50028;
+}
+
+.bell-icon {
+  width: 22px;
+  height: 22px;
+  background-color: currentColor;
+  mask: url('../resources/bell.svg') no-repeat center / contain;
+  -webkit-mask: url('../resources/bell.svg') no-repeat center / contain;
+  display: inline-block;
 }
 
 .btn:disabled,
@@ -171,7 +212,7 @@
 
 .modal {
   background: #fff;
-  border-radius: 14px;
+  border-radius: 15px;
   padding: 1.25rem;
   max-width: 600px;
   width: 100%;

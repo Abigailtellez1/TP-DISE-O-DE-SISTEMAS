@@ -83,8 +83,8 @@ export const ListingsPage = () => {
           <span className="muted">
             Usuario: {userId ?? 'invitado'} · Rol: {role === 'landlord' ? 'anfitrión' : 'estudiante'}
           </span>
-          <button className="btn secondary" type="button" onClick={openNotifications}>
-            Ver notificaciones
+          <button className="icon-btn" type="button" onClick={openNotifications} aria-label="Ver notificaciones">
+            <span className="bell-icon" aria-hidden="true" />
           </button>
           <button className="btn" type="button" onClick={logout}>
             Salir
