@@ -15,5 +15,6 @@ data class UserProfileRequest(
 	val name: String,
 	@field:Min(0)
 	@field:Max(10)
-	val preferredBedrooms: Int? = null
+	val preferredBedrooms: Int? = null,
+	val isLandlord: Boolean = false
 )

@@ -15,5 +15,7 @@ data class User(
 	var email: String,
 	@Column(nullable = false)
 	var name: String,
-	var preferredBedrooms: Int? = null
+	var preferredBedrooms: Int? = null,
+	@Column(nullable = false, columnDefinition = "boolean default false")
+	var isLandlord: Boolean = false
 )

@@ -60,7 +60,8 @@ curl -X PUT http://localhost:8080/api/users/user-123 \
   -d '{
     "email": "user123@example.com",
     "name": "Casey Student",
-    "preferredBedrooms": 2
+    "preferredBedrooms": 2,
+    "isLandlord": false
   }'
 ```
 

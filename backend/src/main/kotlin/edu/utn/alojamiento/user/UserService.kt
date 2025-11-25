@@ -18,12 +18,14 @@ class UserService(
 				id = id,
 				email = request.email,
 				name = request.name,
-				preferredBedrooms = request.preferredBedrooms
+				preferredBedrooms = request.preferredBedrooms,
+				isLandlord = request.isLandlord
 			)
 		}.apply {
 			email = request.email
 			name = request.name
 			preferredBedrooms = request.preferredBedrooms
+			isLandlord = request.isLandlord
 		}
 		return UserResponse.from(userRepository.save(user))
 	}
