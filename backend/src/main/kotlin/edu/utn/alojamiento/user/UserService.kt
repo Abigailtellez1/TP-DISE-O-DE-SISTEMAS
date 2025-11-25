@@ -12,20 +12,47 @@ class UserService(
 	fun getUser(id: String): UserResponse = UserResponse.from(findUser(id))
 
 	@Transactional
-	fun upsertUser(id: String, request: UserProfileRequest): UserResponse {
+	fun upsertStudent(id: String, request: StudentProfileRequest): UserResponse {
 		val user = userRepository.findById(id).orElseGet {
-			User(
+			StudentUser(
 				id = id,
 				email = request.email,
 				name = request.name,
-				preferredBedrooms = request.preferredBedrooms,
-				isLandlord = request.isLandlord
+				preferredBedrooms = request.preferredBedrooms
+			)
+		}.apply {
+			when (this) {
+				is StudentUser -> {
+					email = request.email
+					name = request.name
+					preferredBedrooms = request.preferredBedrooms
+				}
+
+				is LandlordUser -> {
+					email = request.email
+					name = request.name
+				}
+
+				else -> {
+					email = request.email
+					name = request.name
+				}
+			}
+		}
+		return UserResponse.from(userRepository.save(user))
+	}
+
+	@Transactional
+	fun upsertLandlord(id: String, request: LandlordProfileRequest): UserResponse {
+		val user = userRepository.findById(id).orElseGet {
+			LandlordUser(
+				id = id,
+				email = request.email,
+				name = request.name
 			)
 		}.apply {
 			email = request.email
 			name = request.name
-			preferredBedrooms = request.preferredBedrooms
-			isLandlord = request.isLandlord
 		}
 		return UserResponse.from(userRepository.save(user))
 	}

@@ -22,7 +22,7 @@ class UserNotificationService(
 
 	override fun onListingAvailable(listing: Listing) {
 		val listingId = listing.id ?: return
-		val matches = userRepository.findByPreferredBedrooms(listing.bedrooms)
+		val matches = userRepository.findStudentsByPreferredBedrooms(listing.bedrooms)
 		if (matches.isEmpty()) {
 			return
 		}

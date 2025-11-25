@@ -52,16 +52,26 @@ curl -X DELETE http://localhost:8080/api/listings/1
 
 ## Users (`/api/users`)
 
-### Upsert a user profile
+### Upsert a student profile
 
 ```bash
-curl -X PUT http://localhost:8080/api/users/user-123 \
+curl -X PUT http://localhost:8080/api/users/students/user-123 \
   -H "Content-Type: application/json" \
   -d '{
     "email": "user123@example.com",
     "name": "Casey Student",
-    "preferredBedrooms": 2,
-    "isLandlord": false
+    "preferredBedrooms": 2
+  }'
+```
+
+### Upsert a landlord profile
+
+```bash
+curl -X PUT http://localhost:8080/api/users/landlords/host-123 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "host123@example.com",
+    "name": "Casa Host"
   }'
 ```
 

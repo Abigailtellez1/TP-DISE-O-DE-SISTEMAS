@@ -21,12 +21,19 @@ class UserController(
 	@GetMapping("/{id}")
 	fun getUser(@PathVariable id: String): UserResponse = userService.getUser(id)
 
-	@PutMapping("/{id}")
+	@PutMapping("/students/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	fun upsertUser(
+	fun upsertStudent(
 		@PathVariable id: String,
-		@Valid @RequestBody request: UserProfileRequest
-	): UserResponse = userService.upsertUser(id, request)
+		@Valid @RequestBody request: StudentProfileRequest
+	): UserResponse = userService.upsertStudent(id, request)
+
+	@PutMapping("/landlords/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	fun upsertLandlord(
+		@PathVariable id: String,
+		@Valid @RequestBody request: LandlordProfileRequest
+	): UserResponse = userService.upsertLandlord(id, request)
 
 	@GetMapping("/{id}/notifications")
 	fun getNotifications(@PathVariable id: String) =

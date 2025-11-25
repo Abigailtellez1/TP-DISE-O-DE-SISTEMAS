@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
 
-data class UserProfileRequest(
+data class StudentProfileRequest(
 	@field:Email
 	@field:NotBlank
 	val email: String,
@@ -15,6 +15,5 @@ data class UserProfileRequest(
 	val name: String,
 	@field:Min(0)
 	@field:Max(10)
-	val preferredBedrooms: Int? = null,
-	val isLandlord: Boolean = false
+	val preferredBedrooms: Int? = null
 )

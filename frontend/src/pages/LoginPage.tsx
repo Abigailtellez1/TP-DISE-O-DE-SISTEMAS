@@ -2,7 +2,7 @@ import { type FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import miniLogo from '../../resources/utn-logo-mini.svg'
-import { upsertUserProfile } from '../api/users'
+import { upsertLandlordProfile, upsertStudentProfile } from '../api/users'
 
 const DEFAULT_USER = 'ignaciospeicys'
 
@@ -33,12 +33,18 @@ export const LoginPage = () => {
     setSubmitting(true)
     setError(null)
     try {
-      await upsertUserProfile(userId.trim(), {
-        email: profileEmail,
-        name: profileName,
-        preferredBedrooms: preferredBedrooms ?? undefined,
-        isLandlord: role === 'landlord',
-      })
+      if (role === 'landlord') {
+        await upsertLandlordProfile(userId.trim(), {
+          email: profileEmail,
+          name: profileName,
+        })
+      } else {
+        await upsertStudentProfile(userId.trim(), {
+          email: profileEmail,
+          name: profileName,
+          preferredBedrooms: preferredBedrooms ?? undefined,
+        })
+      }
       login(userId.trim(), role)
       navigate('/listings')
     } catch (err) {
@@ -86,14 +92,14 @@ export const LoginPage = () => {
                 className={`btn ${role === 'guest' ? '' : 'secondary'}`}
                 onClick={() => setRole('guest')}
               >
-                Entrar como estudiante
+                Entrar como Estudiante
               </button>
               <button
                 type="button"
                 className={`btn ${role === 'landlord' ? '' : 'secondary'}`}
                 onClick={() => setRole('landlord')}
               >
-                Entrar como host
+                Entrar como Anfitrión
               </button>
             </div>
           </fieldset>

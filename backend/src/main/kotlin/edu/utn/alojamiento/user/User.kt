@@ -1,21 +1,25 @@
 package edu.utn.alojamiento.user
 
 import jakarta.persistence.Column
+import jakarta.persistence.DiscriminatorColumn
+import jakarta.persistence.DiscriminatorType
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
+import jakarta.persistence.Inheritance
+import jakarta.persistence.InheritanceType
 import jakarta.persistence.Table
 
 @Entity
 @Table(name = "users")
-data class User(
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING, length = 16)
+abstract class User(
 	@Id
 	@Column(length = 64)
-	val id: String,
+	open val id: String,
 	@Column(nullable = false, unique = true)
-	var email: String,
+	open var email: String,
 	@Column(nullable = false)
-	var name: String,
-	var preferredBedrooms: Int? = null,
-	@Column(nullable = false, columnDefinition = "boolean default false")
-	var isLandlord: Boolean = false
+	open var name: String,
+	open val type: UserType
 )

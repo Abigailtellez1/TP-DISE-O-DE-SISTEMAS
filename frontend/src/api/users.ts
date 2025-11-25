@@ -4,10 +4,16 @@ import type { ListingNotification, UserProfile, UserProfileRequest } from '../ty
 export const fetchUserProfile = (userId: string) =>
   apiRequest<UserProfile>(`/api/users/${userId}`)
 
-export const upsertUserProfile = (userId: string, payload: UserProfileRequest) =>
-  apiRequest<UserProfile>(`/api/users/${userId}`, {
+export const upsertStudentProfile = (userId: string, payload: UserProfileRequest) =>
+  apiRequest<UserProfile>(`/api/users/students/${userId}`, {
     method: 'PUT',
-    body: payload,
+    body: { ...payload, type: 'STUDENT' },
+  })
+
+export const upsertLandlordProfile = (userId: string, payload: UserProfileRequest) =>
+  apiRequest<UserProfile>(`/api/users/landlords/${userId}`, {
+    method: 'PUT',
+    body: { ...payload, type: 'LANDLORD' },
   })
 
 export const fetchUserNotifications = (userId: string) =>

@@ -2,15 +2,15 @@ export interface UserProfile {
   id: string
   email: string
   name: string
+  type: 'STUDENT' | 'LANDLORD'
   preferredBedrooms: number | null
-  isLandlord: boolean
 }
 
 export interface UserProfileRequest {
   email: string
   name: string
   preferredBedrooms?: number | null
-  isLandlord?: boolean
+  type?: 'STUDENT' | 'LANDLORD'
 }
 
 export interface ListingNotification {
