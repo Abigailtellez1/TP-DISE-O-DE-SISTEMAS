@@ -56,7 +56,7 @@ export const ListingsPage = () => {
           <span className="muted">
             Usuario: {userId} · Rol: {role === 'landlord' ? 'host' : 'estudiante'}
           </span>
-          <button className="btn secondary" type="button" onClick={logout}>
+          <button className="btn" type="button" onClick={logout}>
             Salir
           </button>
         </div>

@@ -1,6 +1,7 @@
 import { type FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import miniLogo from '../../resources/utn-logo-mini.svg'
 
 const DEFAULT_USER = 'ignaciospeicys'
 
@@ -28,6 +29,7 @@ export const LoginPage = () => {
             anfitrión para crear tu propia publicación.
           </p>
         </div>
+        <img src={miniLogo} alt="Logo UTN" className="mini-logo" />
       </header>
 
       <div className="panel">

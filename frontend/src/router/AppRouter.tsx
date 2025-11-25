@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext'
 import { API_BASE_URL } from '../api/client'
 import { ListingFormPage } from '../pages/ListingFormPage'
 import { ListingDetailPage } from '../pages/ListingDetailPage'
+import bannerImg from '../../resources/logo-utn-banner.png'
 
 const Protected = () => {
   const { userId } = useAuth()
@@ -17,6 +18,9 @@ const Protected = () => {
 const AppLayout = () => {
   return (
     <div>
+      <div className="banner">
+        <img src={bannerImg} alt="Universidad Tecnológica Nacional - Alojamiento Estudiantil" />
+      </div>
       <div className="page" style={{ paddingBottom: 0 }}>
         <div className="status-bar" style={{ justifyContent: 'space-between' }}>
           <span className="muted">Frontend · Alojamiento Estudiantil</span>
