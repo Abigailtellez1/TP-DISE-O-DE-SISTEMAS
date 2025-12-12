@@ -43,27 +43,33 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [role, setRole] = useState<UserRole>('guest')
 
   useEffect(() => {
+    console.log('[AuthContext] Loading session from localStorage...')
     const saved = window.localStorage.getItem(STORAGE_KEY)
+    console.log('[AuthContext] Saved data:', saved ? 'Found' : 'Not found')
     if (!saved) return
     try {
       const parsed = JSON.parse(saved) as { token: string }
       const decoded = decodeToken(parsed.token)
+      console.log('[AuthContext] Decoded saved token:', decoded)
       if (decoded) {
         setToken(parsed.token)
         setUserId(decoded.sub)
         setEmail(decoded.email)
         setName(decoded.name)
         setRole(mapRoleToUserRole(decoded.role))
+        console.log('[AuthContext] Session restored:', { userId: decoded.sub, role: mapRoleToUserRole(decoded.role) })
       }
-    } catch {
-      // ignore parse errors
+    } catch (err) {
+      console.error('[AuthContext] Error parsing saved session:', err)
     }
   }, [])
 
   const login = (newToken: string) => {
+    console.log('[AuthContext] login() called with token:', newToken.substring(0, 20) + '...')
     const decoded = decodeToken(newToken)
+    console.log('[AuthContext] Decoded token:', decoded)
     if (!decoded) {
-      console.error('Invalid token')
+      console.error('[AuthContext] Invalid token - cannot decode')
       return
     }
 
@@ -73,6 +79,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setName(decoded.name)
     setRole(mapRoleToUserRole(decoded.role))
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ token: newToken }))
+    console.log('[AuthContext] Token saved to localStorage:', STORAGE_KEY)
+    console.log('[AuthContext] User logged in:', { userId: decoded.sub, role: mapRoleToUserRole(decoded.role) })
   }
 
   const logout = () => {
