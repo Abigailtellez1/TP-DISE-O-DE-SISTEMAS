@@ -1,58 +1,8 @@
-import { type FormEvent, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
 import miniLogo from '../../resources/utn-logo-mini.svg'
-import { upsertLandlordProfile, upsertStudentProfile } from '../api/users'
-
-const DEFAULT_USER = 'ignaciospeicys'
 
 export const LoginPage = () => {
-  const { login } = useAuth()
-  const navigate = useNavigate()
-  const [userId, setUserId] = useState(DEFAULT_USER)
-  const [role, setRole] = useState<'guest' | 'landlord'>('guest')
-  const [profileEmail, setProfileEmail] = useState('estudiante@example.com')
-  const [profileName, setProfileName] = useState('Estudiante UTN')
-  const [preferredBedrooms, setPreferredBedrooms] = useState<number | null>(null)
-  const [isSubmitting, setSubmitting] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault()
-    if (!userId.trim()) return
-    login(userId.trim(), role)
-    navigate('/listings')
-  }
-
-  const handleCreateProfile = async (e: FormEvent) => {
-    e.preventDefault()
-    if (!userId.trim()) {
-      setError('Necesitás un ID de usuario')
-      return
-    }
-    setSubmitting(true)
-    setError(null)
-    try {
-      if (role === 'landlord') {
-        await upsertLandlordProfile(userId.trim(), {
-          email: profileEmail,
-          name: profileName,
-        })
-      } else {
-        await upsertStudentProfile(userId.trim(), {
-          email: profileEmail,
-          name: profileName,
-          preferredBedrooms: preferredBedrooms ?? undefined,
-        })
-      }
-      login(userId.trim(), role)
-      navigate('/listings')
-    } catch (err) {
-      const message = err instanceof Error ? err.message : 'No se pudo guardar el perfil'
-      setError(message)
-    } finally {
-      setSubmitting(false)
-    }
+  const handleGoogleLogin = () => {
+    window.location.href = 'http://localhost:8080/oauth2/authorization/google'
   }
 
   return (
@@ -60,121 +10,47 @@ export const LoginPage = () => {
       <header className="page-header">
         <div>
           <p className="pill">Alojamiento Estudiantil</p>
-          <h1>Ingresá como estudiante o host</h1>
+          <h1>Bienvenido</h1>
           <p className="subtitle">
-            Usá el ID de estudiante para explorar publicaciones, reseñas y notificaciones, o entrá como
-            anfitrión para crear tu propia publicación.
+            Iniciá sesión con tu cuenta de Google para acceder como estudiante o anfitrión.
           </p>
         </div>
         <img src={miniLogo} alt="Logo UTN" className="mini-logo" />
       </header>
 
       <div className="panel">
-        <form className="form-grid" onSubmit={handleSubmit}>
-          <div className="form-field">
-            <label htmlFor="userId">ID de usuario</label>
-            <input
-              id="userId"
-              name="userId"
-              value={userId}
-              onChange={(e) => setUserId(e.target.value)}
-              placeholder="Ingresá o confirmá tu usuario"
-            />
-            <small className="muted">Usuario sugerido: {DEFAULT_USER}</small>
-          </div>
-          <fieldset className="form-field" style={{ border: '1px solid #e5e7eb', padding: '0.75rem', borderRadius: '10px' }}>
-            <legend className="muted" style={{ padding: '0 0.3rem' }}>
-              Elegí tu rol
-            </legend>
-            <div className="button-row">
-              <button
-                type="button"
-                className={`btn ${role === 'guest' ? '' : 'secondary'}`}
-                onClick={() => setRole('guest')}
-              >
-                Entrar como Estudiante
-              </button>
-              <button
-                type="button"
-                className={`btn ${role === 'landlord' ? '' : 'secondary'}`}
-                onClick={() => setRole('landlord')}
-              >
-                Entrar como Anfitrión
-              </button>
-            </div>
-          </fieldset>
+        <div className="form-grid">
           <div className="button-row">
-            <button type="submit" className="btn">
-              Continuar
+            <button onClick={handleGoogleLogin} className="btn" style={{ width: '100%' }}>
+              <svg
+                style={{ width: '20px', height: '20px', marginRight: '8px', verticalAlign: 'middle' }}
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill="currentColor"
+                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                />
+                <path
+                  fill="currentColor"
+                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                />
+                <path
+                  fill="currentColor"
+                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                />
+                <path
+                  fill="currentColor"
+                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                />
+              </svg>
+              Iniciar sesión con Google
             </button>
           </div>
-        </form>
-      </div>
-
-      <div className="panel">
-        <h2 style={{ margin: '0 0 0.75rem 0' }}>Crear o actualizar perfil</h2>
-        <p className="subtitle" style={{ margin: '0 0 1rem 0' }}>
-          Este paso guarda tu rol (estudiante/anfitrión) en el backend.
-        </p>
-        <form className="form-grid" onSubmit={handleCreateProfile}>
-          <div className="form-field">
-            <label htmlFor="profileEmail">Email</label>
-            <input
-              id="profileEmail"
-              value={profileEmail}
-              onChange={(e) => setProfileEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-field">
-            <label htmlFor="profileName">Nombre</label>
-            <input
-              id="profileName"
-              value={profileName}
-              onChange={(e) => setProfileName(e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-field">
-            <label htmlFor="preferredBedrooms">Preferencia de habitaciones</label>
-            <input
-              id="preferredBedrooms"
-              type="number"
-              min={0}
-              max={10}
-              value={preferredBedrooms ?? ''}
-              onChange={(e) =>
-                setPreferredBedrooms(Number.isNaN(e.target.valueAsNumber) ? null : e.target.valueAsNumber)
-              }
-              placeholder="Opcional"
-            />
-          </div>
-          <div className="form-field">
-            <label>Rol a guardar</label>
-            <div className="button-row">
-              <button
-                type="button"
-                className={`btn ${role === 'guest' ? '' : 'secondary'}`}
-                onClick={() => setRole('guest')}
-              >
-                Estudiante
-              </button>
-              <button
-                type="button"
-                className={`btn ${role === 'landlord' ? '' : 'secondary'}`}
-                onClick={() => setRole('landlord')}
-              >
-                Anfitrión
-              </button>
-            </div>
-          </div>
-          {error && <p className="error">Error: {error}</p>}
-          <div className="button-row">
-            <button className="btn" type="submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Guardando…' : 'Guardar perfil y entrar'}
-            </button>
-          </div>
-        </form>
+          <p className="subtitle" style={{ textAlign: 'center', marginTop: '1rem' }}>
+            Al iniciar sesión, podrás crear publicaciones como anfitrión o explorar alojamientos como
+            estudiante.
+          </p>
+        </div>
       </div>
     </div>
   )

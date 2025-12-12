@@ -33,10 +33,27 @@ const buildUrl = (path: string, query?: Record<string, QueryValue>) => {
   return url.toString()
 }
 
+const getAuthToken = (): string | null => {
+  try {
+    const stored = localStorage.getItem('aeu:currentUser')
+    if (!stored) return null
+    const parsed = JSON.parse(stored) as { token?: string }
+    return parsed.token || null
+  } catch {
+    return null
+  }
+}
+
 export async function apiRequest<T>(path: string, options: RequestOptions = {}): Promise<T> {
   const { query, headers, body, method, ...rest } = options
   const finalHeaders = new Headers(headers)
   let finalBody: BodyInit | null | undefined = null
+
+  // Add Authorization header if token exists
+  const token = getAuthToken()
+  if (token) {
+    finalHeaders.set('Authorization', `Bearer ${token}`)
+  }
 
   if (body !== undefined && body !== null) {
     if (typeof body === 'object' && !(body instanceof FormData) && !(body instanceof Blob)) {

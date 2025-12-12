@@ -5,6 +5,8 @@ import { useAuth } from '../context/AuthContext'
 import { API_BASE_URL } from '../api/client'
 import { ListingFormPage } from '../pages/ListingFormPage'
 import { ListingDetailPage } from '../pages/ListingDetailPage'
+import { AuthCallbackPage } from '../pages/AuthCallbackPage'
+import { RegistrationPage } from '../pages/RegistrationPage'
 import bannerImg from '../../resources/logo-utn-banner.png'
 
 const Protected = () => {
@@ -39,6 +41,8 @@ export const AppRouter = createBrowserRouter(
     <Route element={<AppLayout />}>
       <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/auth/callback" element={<AuthCallbackPage />} />
+      <Route path="/auth/register" element={<RegistrationPage />} />
       <Route element={<Protected />}>
         <Route path="/listings" element={<ListingsPage />} />
         <Route path="/listings/new" element={<ListingFormPage />} />
