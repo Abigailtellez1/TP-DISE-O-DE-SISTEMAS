@@ -1,0 +1,39 @@
+services:
+  postgres:
+    container_name: "alojamiento-postgres"
+    image: "postgres:latest"
+    attach: false
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - "postgres-data:/var/lib/postgresql/data"
+
+  alojamiento-backend:
+    build: ./backend
+    container_name: alojamiento-backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    env_file:
+      - ./backend/.env
+
+  alojamiento-frontend:
+    container_name: alojamiento-frontend
+    build:
+      context: ./frontend
+      args:
+        - NODE_ENV
+    env_file:
+      - ./frontend/.env
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "5173:80"
+    depends_on:
+      - alojamiento-backend
+
+volumes:
+  postgres-data:

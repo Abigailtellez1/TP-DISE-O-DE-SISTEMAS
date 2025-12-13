@@ -1,0 +1,15 @@
+dist/
+*.log
+node_modules/
+.yarn
+*.env
+*.md
+.env.example
+.dockerignore
+.git
+.gitignore
+README.md
+docker-compose.yml
+Dockerfile
+package-lock.json
+yarn.lock
