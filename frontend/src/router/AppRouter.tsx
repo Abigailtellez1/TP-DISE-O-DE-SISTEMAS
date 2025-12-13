@@ -2,9 +2,10 @@ import { Navigate, Outlet, Route, createBrowserRouter, createRoutesFromElements 
 import { LoginPage } from '../pages/LoginPage'
 import { ListingsPage } from '../pages/ListingsPage'
 import { useAuth } from '../context/AuthContext'
-import { API_BASE_URL } from '../api/client'
 import { ListingFormPage } from '../pages/ListingFormPage'
 import { ListingDetailPage } from '../pages/ListingDetailPage'
+import { AuthCallbackPage } from '../pages/AuthCallbackPage'
+import { RegistrationPage } from '../pages/RegistrationPage'
 import bannerImg from '../../resources/logo-utn-banner.png'
 
 const Protected = () => {
@@ -23,10 +24,7 @@ const AppLayout = () => {
       </div>
       <div className="page" style={{ paddingBottom: 0 }}>
         <div className="status-bar" style={{ justifyContent: 'space-between' }}>
-          <span className="muted">Frontend · Alojamiento Estudiantil</span>
-          <span className="muted">
-            Backend: <code>{API_BASE_URL}</code>
-          </span>
+          <span className="muted">Diseño de Sistemas · Alojamiento Estudiantil</span>
         </div>
       </div>
       <Outlet />
@@ -39,6 +37,8 @@ export const AppRouter = createBrowserRouter(
     <Route element={<AppLayout />}>
       <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/auth/callback" element={<AuthCallbackPage />} />
+      <Route path="/auth/register" element={<RegistrationPage />} />
       <Route element={<Protected />}>
         <Route path="/listings" element={<ListingsPage />} />
         <Route path="/listings/new" element={<ListingFormPage />} />
