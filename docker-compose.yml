@@ -2,6 +2,8 @@ services:
   postgres:
     container_name: "alojamiento-postgres"
     image: "postgres:latest"
+    ports:
+      - "5432:5432"
     attach: false
     environment:
       - POSTGRES_USER=postgres
