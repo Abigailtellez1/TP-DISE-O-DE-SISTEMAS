@@ -1,38 +1,52 @@
-import { Navigate, Outlet, Route, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
-import { LoginPage } from '../pages/LoginPage'
-import { ListingsPage } from '../pages/ListingsPage'
-import { useAuth } from '../context/AuthContext'
-import { ListingFormPage } from '../pages/ListingFormPage'
-import { ListingDetailPage } from '../pages/ListingDetailPage'
-import { AuthCallbackPage } from '../pages/AuthCallbackPage'
-import { RegistrationPage } from '../pages/RegistrationPage'
-import { ReservationFormPage } from '../pages/ReservationFormPage'
-import { ReservationsPage } from '../pages/ReservationsPage'
-import bannerImg from '../../resources/logo-utn-banner.png'
+import {
+  Navigate,
+  Outlet,
+  Route,
+  createBrowserRouter,
+  createRoutesFromElements,
+} from "react-router-dom";
+import { LoginPage } from "../pages/LoginPage";
+import { ListingsPage } from "../pages/ListingsPage";
+import { useAuth } from "../context/AuthContext";
+import { ListingFormPage } from "../pages/ListingFormPage";
+import { ListingDetailPage } from "../pages/ListingDetailPage";
+import { AuthCallbackPage } from "../pages/AuthCallbackPage";
+import { RegistrationPage } from "../pages/RegistrationPage";
+import { ReservationFormPage } from "../pages/ReservationFormPage";
+import { ReservationsPage } from "../pages/ReservationsPage";
+import bannerImg from "../../resources/logo-utn-banner.png";
 
 const Protected = () => {
-  const { userId } = useAuth()
-  if (!userId) {
-    return <Navigate to="/login" replace />
+  const { userId, initialized } = useAuth();
+  if (!initialized) {
+    return <div>Cargando sesión...</div>;
   }
-  return <Outlet />
-}
+  if (!userId) {
+    return <Navigate to="/login" replace />;
+  }
+  return <Outlet />;
+};
 
 const AppLayout = () => {
   return (
     <div>
       <div className="banner">
-        <img src={bannerImg} alt="Universidad Tecnológica Nacional - Alojamiento Estudiantil" />
+        <img
+          src={bannerImg}
+          alt="Universidad Tecnológica Nacional - Alojamiento Estudiantil"
+        />
       </div>
       <div className="page" style={{ paddingBottom: 0 }}>
-        <div className="status-bar" style={{ justifyContent: 'space-between' }}>
-          <span className="muted">Diseño de Sistemas · Alojamiento Estudiantil</span>
+        <div className="status-bar" style={{ justifyContent: "space-between" }}>
+          <span className="muted">
+            Diseño de Sistemas · Alojamiento Estudiantil
+          </span>
         </div>
       </div>
       <Outlet />
     </div>
-  )
-}
+  );
+};
 
 export const AppRouter = createBrowserRouter(
   createRoutesFromElements(
@@ -51,4 +65,4 @@ export const AppRouter = createBrowserRouter(
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Route>,
   ),
-)
+);
