@@ -1,5 +1,5 @@
 services:
-  postgres:
+  alojamiento-postgres:
     container_name: "alojamiento-postgres"
     image: "postgres:15-alpine"
     ports:
@@ -18,7 +18,7 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - postgres
+      - alojamiento-postgres
     env_file:
       - ./backend/.env
 

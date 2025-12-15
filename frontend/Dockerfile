@@ -1,18 +1,18 @@
-FROM node:lts AS build
+FROM node:22 AS build
 
 WORKDIR /home/node/app
 RUN chown -R node:node /home/node/app
 
-COPY package.json .
+COPY package.json yarn.lock .
 
 ARG NODE_ENV
-RUN yarn install
+RUN yarn install --frozen-lockfile
 
 COPY . ./
 RUN yarn run build
 
 
-FROM nginx:stable
+FROM nginx:1.29
 
 RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/conf.d

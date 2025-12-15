@@ -1,7 +1,7 @@
 services:
   alojamiento-db:
     container_name: "alojamiento-db"
-    image: "postgres:latest"
+    image: "postgres:15-alpine"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
