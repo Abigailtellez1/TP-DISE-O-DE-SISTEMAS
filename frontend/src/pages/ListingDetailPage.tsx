@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { fetchListing } from '../api/listings'
 import { createReview, fetchReviews } from '../api/reviews'
+import { fetchReservations } from '../api/reservations'
 import type { Listing } from '../types/listing'
 import type { Review } from '../types/review'
+import type { Reservation } from '../types/reservation'
 import { useAuth } from '../context/AuthContext'
 
 export const ListingDetailPage = () => {
@@ -23,6 +25,8 @@ export const ListingDetailPage = () => {
   const [newComment, setNewComment] = useState('')
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [submitLoading, setSubmitLoading] = useState(false)
+  const [userReservation, setUserReservation] = useState<Reservation | null>(null)
+  const [reservationLoading, setReservationLoading] = useState(false)
 
   useEffect(() => {
     if (!listingId) {
@@ -41,6 +45,26 @@ export const ListingDetailPage = () => {
         setLoading(false)
       })
   }, [listingId])
+
+  useEffect(() => {
+    if (!listingId || !userId || role !== 'guest') return
+    let active = true
+    setReservationLoading(true)
+    fetchReservations(0, 1, { guestId: userId, listingId })
+      .then((res) => {
+        if (!active) return
+        setUserReservation(res.content.length > 0 ? res.content[0] : null)
+        setReservationLoading(false)
+      })
+      .catch(() => {
+        if (!active) return
+        setUserReservation(null)
+        setReservationLoading(false)
+      })
+    return () => {
+      active = false
+    }
+  }, [listingId, userId, role])
 
   useEffect(() => {
     if (!listingId) return
@@ -91,6 +115,7 @@ export const ListingDetailPage = () => {
   }
 
   const canReview = userId !== null && role === 'guest'
+  const canReserve = userId !== null && role === 'guest'
   const displayRole = role === 'landlord' ? 'Anfitrión' : 'Estudiante'
 
   return (
@@ -99,20 +124,47 @@ export const ListingDetailPage = () => {
         <div>
           <p className="pill">Publicación</p>
           <h1>{listing ? listing.title : 'Detalle del alojamiento'}</h1>
-          <p className="subtitle">Detalle rápido desde el backend.</p>
         </div>
         <div className="button-row">
+          <button
+            className="btn success"
+            onClick={() => navigate(`/reservations/new?listingId=${listingId}`)}
+            disabled={!listingId || !canReserve}
+            title={!canReserve ? 'Solo los estudiantes pueden crear reservas' : undefined}
+          >
+            Crear reserva
+          </button>
           <button className="btn secondary" onClick={() => navigate('/listings')}>
             Volver a publicaciones
           </button>
         </div>
       </header>
 
+      {!reservationLoading && userReservation && (
+          <div style={{
+            padding: '1rem',
+            backgroundColor: '#4caf50',
+            color: 'white',
+            borderRadius: '20px',
+            fontWeight: 'bold'
+          }}>
+            <div style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>
+              ✓ Tenés una reserva activa en este alojamiento
+            </div>
+            <div style={{ fontSize: '0.9rem', fontWeight: 'normal', opacity: 0.95 }}>
+              Check-in: {new Date(userReservation.checkIn).toLocaleDateString('es-AR')} ·
+              Check-out: {new Date(userReservation.checkOut).toLocaleDateString('es-AR')} ·
+              {userReservation.guests} {userReservation.guests === 1 ? 'huésped' : 'huéspedes'}
+            </div>
+          </div>
+      )}
+
       <div className="panel">
         {loading && <p className="muted">Cargando…</p>}
         {error && <p className="error">Error: {error}</p>}
         {!loading && !error && listing && (
-          <div className="form-grid">
+          <>
+            <div className="form-grid">
             <div className="form-field">
               <label>Ciudad</label>
               <div>{listing.city}</div>
@@ -142,6 +194,7 @@ export const ListingDetailPage = () => {
               <div>{listing.description}</div>
             </div>
           </div>
+          </>
         )}
       </div>
 

@@ -106,3 +106,43 @@ curl -X POST http://localhost:8080/api/listings/1/reviews \
 ```bash
 curl "http://localhost:8080/api/listings/1/reviews?page=0&size=3"
 ```
+
+## Reservations (`/api/reservations`)
+
+### Create a reservation
+
+```bash
+curl -X POST http://localhost:8080/api/reservations \
+  -H "Content-Type: application/json" \
+  -d '{
+	"listingId": 6,
+	"guestId": "ignaciospeicys@gmail.com",
+	"checkIn": "2025-02-01",
+	"checkOut": "2025-02-05",
+    "guests": 2
+  }'
+```
+
+### Get a reservation by ID
+
+```bash
+curl http://localhost:8080/api/reservations/1
+```
+
+### Get reservations with pagination (with optional filters)
+
+```bash
+curl "http://localhost:8080/api/reservations?page=0&size=5&listingId=1&guestId=user-123"
+```
+
+### Update an existing reservation
+
+```bash
+curl -X PATCH http://localhost:8080/api/reservations/1 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "checkIn": "2025-02-03",
+    "checkOut": "2025-02-07",
+    "guests": 3
+  }'
+```

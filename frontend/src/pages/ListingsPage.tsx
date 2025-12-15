@@ -86,6 +86,9 @@ export const ListingsPage = () => {
           <button className="icon-btn" type="button" onClick={openNotifications} aria-label="Ver notificaciones">
             <span className="bell-icon" aria-hidden="true" />
           </button>
+          <button className="btn" type="button" onClick={() => navigate('/reservations')}>
+            Mis reservas
+          </button>
           <button className="btn" type="button" onClick={logout}>
             Salir
           </button>

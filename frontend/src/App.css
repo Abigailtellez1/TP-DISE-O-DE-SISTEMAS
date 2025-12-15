@@ -129,6 +129,18 @@
   color: #A50028;
 }
 
+.btn.success {
+  background: #16a34a;
+  color: #f0fdf4;
+  border: 1px solid #16a34a;
+}
+
+.btn.success:hover {
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px solid #16a34a;
+}
+
 .icon-btn {
   border: 1px solid;
   padding: 0.5rem;

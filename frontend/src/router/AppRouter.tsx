@@ -6,6 +6,8 @@ import { ListingFormPage } from '../pages/ListingFormPage'
 import { ListingDetailPage } from '../pages/ListingDetailPage'
 import { AuthCallbackPage } from '../pages/AuthCallbackPage'
 import { RegistrationPage } from '../pages/RegistrationPage'
+import { ReservationFormPage } from '../pages/ReservationFormPage'
+import { ReservationsPage } from '../pages/ReservationsPage'
 import bannerImg from '../../resources/logo-utn-banner.png'
 
 const Protected = () => {
@@ -43,6 +45,8 @@ export const AppRouter = createBrowserRouter(
         <Route path="/listings" element={<ListingsPage />} />
         <Route path="/listings/new" element={<ListingFormPage />} />
         <Route path="/listings/:id" element={<ListingDetailPage />} />
+        <Route path="/reservations" element={<ReservationsPage />} />
+        <Route path="/reservations/new" element={<ReservationFormPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Route>,
