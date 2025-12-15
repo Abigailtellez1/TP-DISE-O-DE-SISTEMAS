@@ -11,7 +11,7 @@ export function RegistrationPage() {
   const googleEmail = searchParams.get('email') || ''
   const googleName = searchParams.get('name') || ''
 
-  const [role, setRole] = useState<'guest' | 'landlord'>('guest')
+  const [role, setRole] = useState<'student' | 'landlord'>('student')
   const [preferredBedrooms, setPreferredBedrooms] = useState<number | null>(null)
   const [isSubmitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -34,8 +34,8 @@ export function RegistrationPage() {
         body: JSON.stringify({
           email: googleEmail,
           name: googleName,
-          role: role === 'guest' ? 'STUDENT' : 'LANDLORD',
-          preferredBedrooms: role === 'guest' ? preferredBedrooms : null,
+          role: role === 'student' ? 'STUDENT' : 'LANDLORD',
+          preferredBedrooms: role === 'student' ? preferredBedrooms : null,
         }),
       })
 
@@ -99,8 +99,8 @@ export function RegistrationPage() {
             <div className="button-row">
               <button
                 type="button"
-                className={`btn ${role === 'guest' ? '' : 'secondary'}`}
-                onClick={() => setRole('guest')}
+                className={`btn ${role === 'student' ? '' : 'secondary'}`}
+                onClick={() => setRole('student')}
               >
                 Estudiante
               </button>
@@ -114,7 +114,7 @@ export function RegistrationPage() {
             </div>
           </fieldset>
 
-          {role === 'guest' && (
+          {role === 'student' && (
             <div className="form-field">
               <label htmlFor="preferredBedrooms">Preferencia de habitaciones</label>
               <input

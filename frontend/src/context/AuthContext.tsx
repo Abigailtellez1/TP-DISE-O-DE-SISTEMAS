@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { jwtDecode } from 'jwt-decode'
 
-type UserRole = 'guest' | 'landlord'
+type UserRole = 'student' | 'landlord'
 
 interface JwtPayload {
   sub: string // userId
@@ -32,7 +32,7 @@ const decodeToken = (token: string): JwtPayload | null => {
 }
 
 const mapRoleToUserRole = (role: string): UserRole => {
-  return role === 'LANDLORD' ? 'landlord' : 'guest'
+  return role === 'LANDLORD' ? 'landlord' : 'student'
 }
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [userId, setUserId] = useState<string | null>(null)
   const [email, setEmail] = useState<string | null>(null)
   const [name, setName] = useState<string | null>(null)
-  const [role, setRole] = useState<UserRole>('guest')
+  const [role, setRole] = useState<UserRole>('student')
 
   useEffect(() => {
     console.log('[AuthContext] Loading session from localStorage...')
@@ -88,7 +88,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUserId(null)
     setEmail(null)
     setName(null)
-    setRole('guest')
+    setRole('student')
     window.localStorage.removeItem(STORAGE_KEY)
   }
 

@@ -47,7 +47,7 @@ export const ListingDetailPage = () => {
   }, [listingId])
 
   useEffect(() => {
-    if (!listingId || !userId || role !== 'guest') return
+    if (!listingId || !userId || role !== 'student') return
     let active = true
     setReservationLoading(true)
     fetchReservations(0, 1, { guestId: userId, listingId })
@@ -114,8 +114,8 @@ export const ListingDetailPage = () => {
     }
   }
 
-  const canReview = userId !== null && role === 'guest'
-  const canReserve = userId !== null && role === 'guest'
+  const canReview = userId !== null && role === 'student'
+  const canReserve = userId !== null && role === 'student'
   const displayRole = role === 'landlord' ? 'Anfitrión' : 'Estudiante'
 
   return (

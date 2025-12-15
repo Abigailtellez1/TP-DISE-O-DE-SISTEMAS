@@ -69,7 +69,7 @@ export const ReservationFormPage = () => {
     }
   }
 
-  if (role !== 'guest') {
+  if (role !== 'student') {
     return (
       <div className="page">
         <header className="page-header">
