@@ -97,8 +97,11 @@ docker run -d \
 **Nota:** El frontend necesita que la variable `VITE_API_BASE_URL` esté configurada en tiempo de build. Para cambiarla, debes reconstruir la imagen:
 
 ```bash
-cd frontend
-docker build -t alojamiento-frontend --build-arg VITE_API_BASE_URL=http://your-backend-url:8080 .
+docker run -d \
+  --name alojamiento-frontend \
+  -p 5173:80 \
+  --env-file frontend/.env.docker \
+  alojamiento-frontend
 ```
 
 ## Desarrollo Local
