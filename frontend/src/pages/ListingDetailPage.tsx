@@ -91,6 +91,7 @@ export const ListingDetailPage = () => {
   }
 
   const canReview = userId !== null && role === 'guest'
+  const canReserve = userId !== null && role === 'guest'
   const displayRole = role === 'landlord' ? 'Anfitrión' : 'Estudiante'
 
   return (
@@ -102,6 +103,14 @@ export const ListingDetailPage = () => {
           <p className="subtitle">Detalle rápido desde el backend.</p>
         </div>
         <div className="button-row">
+          <button
+            className="btn success"
+            onClick={() => navigate(`/reservations/new?listingId=${listingId}`)}
+            disabled={!listingId || !canReserve}
+            title={!canReserve ? 'Solo los estudiantes pueden crear reservas' : undefined}
+          >
+            Crear reserva
+          </button>
           <button className="btn secondary" onClick={() => navigate('/listings')}>
             Volver a publicaciones
           </button>

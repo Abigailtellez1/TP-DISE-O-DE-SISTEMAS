@@ -1,7 +1,5 @@
 package edu.utn.alojamiento.reservation
 
-import java.time.LocalDate
-
 data class ReservationResponse(
 	val id: Long,
 	val listingId: Long,
