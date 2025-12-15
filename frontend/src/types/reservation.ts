@@ -1,11 +1,12 @@
 export interface Reservation {
   id: number
   listingId: number
+  listingTitle: string
   guestId: string
+  guestName: string
   checkIn: string
   checkOut: string
   guests: number
-  status?: string
 }
 
 export interface ReservationRequest {
@@ -14,4 +15,14 @@ export interface ReservationRequest {
   checkIn: string
   checkOut: string
   guests: number
+}
+
+export type ReservationUpdate = Partial<Omit<ReservationRequest, 'listingId' | 'guestId'>>
+
+export interface Page<T> {
+  content: T[]
+  totalPages: number
+  totalElements: number
+  size: number
+  number: number
 }
