@@ -7,6 +7,8 @@ import type { Listing } from '../types/listing'
 import type { Review } from '../types/review'
 import type { Reservation } from '../types/reservation'
 import { useAuth } from '../context/AuthContext'
+import { getListingVisuals } from '../utils/listingVisuals'
+import { formatCurrency } from '../utils/formatters'
 
 export const ListingDetailPage = () => {
   const { id } = useParams<{ id: string }>()
@@ -163,38 +165,38 @@ export const ListingDetailPage = () => {
         {loading && <p className="muted">Cargando…</p>}
         {error && <p className="error">Error: {error}</p>}
         {!loading && !error && listing && (
-          <>
-            <div className="form-grid">
-            <div className="form-field">
-              <label>Ciudad</label>
-              <div>{listing.city}</div>
-            </div>
-            <div className="form-field">
-              <label>Barrio</label>
-              <div>{listing.district}</div>
-            </div>
-            <div className="form-field">
-              <label>Precio por noche</label>
-              <div>${listing.nightlyPrice.toFixed(2)}</div>
-            </div>
-            <div className="form-field">
-              <label>Habitaciones</label>
-              <div>{listing.bedrooms}</div>
-            </div>
-            <div className="form-field">
-              <label>Máximo de huéspedes</label>
-              <div>{listing.maxGuests}</div>
-            </div>
-            <div className="form-field">
-              <label>Propietario</label>
-              <div>{listing.ownerId}</div>
-            </div>
-            <div className="form-field">
-              <label>Descripción</label>
-              <div>{listing.description}</div>
-            </div>
-          </div>
-          </>
+          (() => {
+            const visuals = getListingVisuals(listing)
+            return (
+              <>
+                <div className="detail-hero">
+                  <img src={visuals.imageUrl} alt={listing.title} />
+                </div>
+                <h2 style={{ marginTop: 0 }}>{listing.title}</h2>
+                <p className="muted" style={{ marginTop: '0.3rem' }}>{listing.description}</p>
+                <div className="detail-metrics">
+                  <span className="detail-pill">📍 {listing.city} · {listing.district}</span>
+                  <span className="detail-pill">🏠 {listing.bedrooms} habs</span>
+                  <span className="detail-pill">👥 {listing.maxGuests} huéspedes</span>
+                  <span className="detail-pill">💰 {formatCurrency(listing.nightlyPrice)} / noche</span>
+                </div>
+                <div className="detail-grid">
+                  <div className="detail-highlight">
+                    <h4>Propietario</h4>
+                    <p style={{ margin: 0 }}>{listing.ownerId}</p>
+                  </div>
+                  <div className="detail-highlight">
+                    <h4>Ubicación</h4>
+                    <p style={{ margin: 0 }}>{listing.city}, {listing.district}</p>
+                  </div>
+                  <div className="detail-highlight">
+                    <h4>Habitaciones</h4>
+                    <p style={{ margin: 0 }}>{listing.bedrooms} habitaciones · {listing.maxGuests} huéspedes</p>
+                  </div>
+                </div>
+              </>
+            )
+          })()
         )}
       </div>
 
@@ -206,13 +208,15 @@ export const ListingDetailPage = () => {
           <>
             {reviews.length === 0 && <p className="muted">Todavía no hay reseñas.</p>}
             {reviews.map((review) => (
-              <div key={review.id} className="form-field">
-                <label>
-                  {review.authorName} · {new Date(review.createdAt).toLocaleDateString()}
-                </label>
-                <div>
-                  {'★'.repeat(review.rating).padEnd(5, '☆')} — {review.comment}
+              <div key={review.id} className="review-card">
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                  <strong>{review.authorName}</strong>
+                  <span className="muted">{new Date(review.createdAt).toLocaleDateString()}</span>
                 </div>
+                <div style={{ fontSize: '1.1rem', marginBottom: '0.35rem' }}>
+                  {'★'.repeat(review.rating).padEnd(5, '☆')}
+                </div>
+                <p style={{ margin: 0 }}>{review.comment}</p>
               </div>
             ))}
             {totalPages > 1 && (

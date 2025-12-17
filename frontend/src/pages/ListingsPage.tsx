@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react'
 import { fetchListings } from '../api/listings'
 import type { Listing, Page } from '../types/listing'
 import { useAuth } from '../context/AuthContext'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { fetchUserNotifications } from '../api/users'
 import type { ListingNotification } from '../types/user'
 import { Modal } from '../components/Modal'
+import { getListingVisuals } from '../utils/listingVisuals'
+import { formatCurrency } from '../utils/formatters'
 
 interface ListingPageState {
   data: Page<Listing> | null
@@ -107,38 +109,50 @@ export const ListingsPage = () => {
         {state.error && <p className="error">Error: {state.error}</p>}
         {!state.loading && !state.error && state.data && (
           <>
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>Título</th>
-                  <th>Barrio</th>
-                  <th>Habitaciones</th>
-                  <th>Huéspedes</th>
-                  <th>Precio/noche</th>
-                </tr>
-              </thead>
-              <tbody>
-                {state.data.content.length === 0 ? (
-                  <tr>
-                    <td colSpan={5} className="muted">
-                      No hay publicaciones.
-                    </td>
-                  </tr>
-                ) : (
-                  state.data.content.map((listing) => (
-                    <tr key={listing.id}>
-                      <td>
-                        <Link to={`/listings/${listing.id}`}>{listing.title}</Link>
-                      </td>
-                      <td>{listing.district}</td>
-                      <td>{listing.bedrooms}</td>
-                      <td>{listing.maxGuests}</td>
-                      <td>${listing.nightlyPrice.toFixed(2)}</td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+            {state.data.content.length === 0 ? (
+              <p className="muted" style={{ textAlign: 'center' }}>
+                No hay publicaciones.
+              </p>
+            ) : (
+              <div className="listing-grid">
+                {state.data.content.map((listing) => {
+                  const visuals = getListingVisuals(listing)
+                  return (
+                    <article key={listing.id} className="listing-card">
+                      <img src={visuals.imageUrl} alt={listing.title} className="listing-card__image" />
+                      <div className="listing-card__body">
+                        <div className="listing-card__title">
+                          <div>
+                            <h3 style={{ margin: 0 }}>{listing.title}</h3>
+                            <div className="listing-meta" style={{ marginTop: '0.3rem' }}>
+                              <span>📍 {listing.city}</span>
+                              <span>🏠 {listing.bedrooms} habs</span>
+                              <span>👥 {listing.maxGuests} huéspedes</span>
+                            </div>
+                          </div>
+                          <div className="rating-pill">
+                            ★ {visuals.rating.toFixed(1)}
+                            <span className="muted" style={{ fontSize: '0.8rem' }}>({visuals.reviews})</span>
+                          </div>
+                        </div>
+
+                        <p className="muted" style={{ margin: 0 }}>{listing.description}</p>
+
+                        <div className="listing-actions">
+                          <div>
+                            <div className="price-tag">{formatCurrency(listing.nightlyPrice)}</div>
+                            <div className="muted" style={{ fontSize: '0.85rem' }}>por noche</div>
+                          </div>
+                          <button className="btn secondary" onClick={() => navigate(`/listings/${listing.id}`)}>
+                            Ver detalle
+                          </button>
+                        </div>
+                      </div>
+                    </article>
+                  )
+                })}
+              </div>
+            )}
 
             <div className="status-bar" style={{ justifyContent: 'space-between', marginTop: '1rem' }}>
               <div className="muted">
