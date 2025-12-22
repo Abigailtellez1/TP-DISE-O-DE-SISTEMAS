@@ -73,7 +73,7 @@ export const ListingDetailPage = () => {
     let active = true
     setReviewsLoading(true)
     setReviewsError(null)
-    fetchReviews(listingId, page, 5)
+    fetchReviews(listingId, page, 6)
       .then((res) => {
         if (!active) return
         setReviews(res.content)
