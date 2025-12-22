@@ -8,7 +8,7 @@ RUN ./gradlew dependencies --no-daemon
 COPY . .
 RUN ./gradlew bootJar --no-daemon -DskipTests
 
-FROM eclipse-temurin:21-jre
+FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 COPY --from=build /app/build/libs/*.jar app.jar
 ENV SPRING_PROFILES_ACTIVE=prod
